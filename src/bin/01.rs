@@ -15,13 +15,13 @@ impl Dial {
 
     fn turn_right(&mut self, step: i32) -> i32 {
         let mut zeroes = 0;
-        println!("Turning right {} steps from {}", step, self.pos);
+        // println!("Turning right {} steps from {}", step, self.pos);
         for _ in 0..step {
             self.pos += 1;
             if self.pos > self.max {
                 zeroes += 1;
                 self.pos = 0;
-                println!("Crossed zero at position {}", self.pos);
+                // println!("Crossed zero at position {}", self.pos);
             }
         }
         zeroes
@@ -29,7 +29,7 @@ impl Dial {
 
     fn turn_left(&mut self, step: i32) -> i32 {
         let mut zeroes = 0;
-        println!("Turning left {} steps from {}", step, self.pos);
+        // println!("Turning left {} steps from {}", step, self.pos);
         for _ in 0..step {
             self.pos -= 1;
             if self.pos == 0 {
@@ -37,7 +37,7 @@ impl Dial {
             }
             if self.pos < 0 {
                 self.pos = self.max;
-                println!("Crossed zero at position {}", self.pos);
+                // println!("Crossed zero at position {}", self.pos);
             }
         }
         zeroes
@@ -49,7 +49,7 @@ pub fn part_one(input: &str) -> Option<u64> {
     let mut zeroes = 0;
     for line in input.lines() {
         let step = line[1..].parse::<i32>().unwrap();
-        let crossings = match line.chars().next().unwrap() {
+        let _crossings = match line.chars().next().unwrap() {
             'R' => dial.turn_right(step),
             'L' => dial.turn_left(step),
             _ => panic!("Invalid direction"),
