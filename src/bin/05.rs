@@ -17,12 +17,12 @@ pub fn part_one(input: &str) -> Option<u64> {
         .map(|l| l.split_once('-').unwrap())
         .map(|(min, max)| (min.parse::<u64>().unwrap(), max.parse::<u64>().unwrap()))
         .collect();
-    println!("{:?}", fresh_ranges);
+    // println!("{:?}", fresh_ranges);
     for line in parts[1].lines() {
         let id = line.parse::<u64>().unwrap();
-        println!("checking id: {:?}", id);
+        // println!("checking id: {:?}", id);
         if is_id_fresh(&fresh_ranges, id) {
-            println!("fresh id: {:?}", id);
+            // println!("fresh id: {:?}", id);
             result += 1;
         }
     }
@@ -33,31 +33,31 @@ fn combine_ranges(input_range: &mut Vec<(u64, u64)>) -> Option<Vec<(u64, u64)>> 
     let mut combined_ranges = Vec::<(u64, u64)>::new();
     let mut modified = false;
     input_range.sort_by(|a, b| a.0.cmp(&b.0));
-    println!("sorted: {:?}", input_range);
+    // println!("sorted: {:?}", input_range);
     for (min, max) in input_range {
         let mut added = false;
-        println!("checking: {:?}-{:?}", min, max);
+        // println!("checking: {:?}-{:?}", min, max);
         for i in 0..combined_ranges.len() {
-            println!("checking comb: {:?}", combined_ranges[i]);
+            // println!("checking comb: {:?}", combined_ranges[i]);
 
             if *min >= combined_ranges[i].0 && *max <= combined_ranges[i].1 {
                 // fully inside another range, skip this one
                 added = true;
                 modified = true;
-                println!("skip - inside existing range");
+                // println!("skip - inside existing range");
                 continue;
             }
             if *min < combined_ranges[i].0 && *max >= combined_ranges[i].0 {
                 // Modify min to include this one
                 combined_ranges[i].0 = *min;
-                println!("new min = {:?}", *min);
+                // println!("new min = {:?}", *min);
                 modified = true;
                 added = true;
             }
             if *max > combined_ranges[i].1 && *min <= combined_ranges[i].1 {
                 // Modified *max to include this one
                 combined_ranges[i].1 = *max;
-                println!("new max = {:?}", max);
+                // println!("new max = {:?}", max);
                 modified = true;
                 added = true;
             }
@@ -78,7 +78,7 @@ fn combine_ranges(input_range: &mut Vec<(u64, u64)>) -> Option<Vec<(u64, u64)>> 
 
 pub fn part_two(input: &str) -> Option<u64> {
     let parts: Vec<&str> = input.trim().split("\n\n").collect();
-    let mut fresh_ranges: Vec<(u64, u64)> = parts[0]
+    let fresh_ranges: Vec<(u64, u64)> = parts[0]
         .lines()
         .map(|l| l.split_once('-').unwrap())
         .map(|(min, max)| (min.parse::<u64>().unwrap(), max.parse::<u64>().unwrap()))
@@ -91,7 +91,7 @@ pub fn part_two(input: &str) -> Option<u64> {
         }
     }
     let mut result = 0;
-    println!("all combined: {:?}", combined_ranges);
+    // println!("all combined: {:?}", combined_ranges);
     for (min, max) in combined_ranges {
         result += max - min + 1;
     }
