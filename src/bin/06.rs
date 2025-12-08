@@ -31,7 +31,52 @@ pub fn part_one(input: &str) -> Option<u64> {
 }
 
 pub fn part_two(input: &str) -> Option<u64> {
-    None
+    let grid: Vec<Vec<char>> = input.lines().map(|l| l.chars().collect()).collect();
+    let mut total = 0;
+    let height = grid.len();
+    let width = grid[0].len();
+    let mut current_stack = Vec::<u64>::new();
+    let mut next_op: char = ' ';
+    // println!("grid {:?}", grid);
+
+    for x in 0..width {
+        let mut next_digit = String::new();
+        let mut all_whitespace = true;
+        for y in 0..height {
+            let c = grid[y][x];
+            if c.is_whitespace() {
+                continue;
+            }
+            all_whitespace = false;
+            if c.is_numeric() {
+                next_digit.push(c);
+            } else if c == '*' || c == '+' {
+                next_op = c;
+            }
+        }
+        if all_whitespace {
+            // seen full column of whitespace - finished this problem
+            match next_op {
+                '+' => total += current_stack.iter().sum::<u64>(),
+                '*' => total += current_stack.iter().product::<u64>(),
+                _ => unreachable!(),
+            }
+            // println!("processed problem");
+            current_stack.clear();
+            next_op = ' ';
+        } else {
+            current_stack.push(next_digit.parse::<u64>().unwrap());
+            // println!("op: {:?} current stack: {:?}", next_op, current_stack);
+        }
+    }
+    // process final problem
+    match next_op {
+        '+' => total += current_stack.iter().sum::<u64>(),
+        '*' => total += current_stack.iter().product::<u64>(),
+        _ => unreachable!(),
+    }
+    // println!("processed problem");
+    Some(total)
 }
 
 #[cfg(test)]
@@ -47,6 +92,6 @@ mod tests {
     #[test]
     fn test_part_two() {
         let result = part_two(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, None);
+        assert_eq!(result, Some(3263827));
     }
 }

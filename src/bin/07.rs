@@ -1,4 +1,4 @@
-use std::collections::{HashMap, HashSet, VecDeque};
+use std::collections::{HashMap, VecDeque};
 
 advent_of_code::solution!(7);
 
@@ -7,7 +7,6 @@ type Position = (usize, usize);
 struct Map {
     pub grid: Vec<Vec<char>>,
     pub start: Position,
-    pub width: usize,
     pub height: usize,
 }
 
@@ -16,21 +15,19 @@ impl Map {
         let grid: Vec<Vec<char>> = input.trim().lines().map(|l| l.chars().collect()).collect();
         let x = grid[0].iter().position(|c| *c == 'S').unwrap();
         let height = grid.len();
-        let width = grid[0].len();
         Self {
             grid,
             start: (x, 0),
             height,
-            width,
         }
     }
 
-    fn print(&self) {
-        println!("Grid:");
-        for line in &self.grid {
-            println!("{:?}", line);
-        }
-    }
+    // fn print(&self) {
+    //     println!("Grid:");
+    //     for line in &self.grid {
+    //         println!("{:?}", line);
+    //     }
+    // }
 
     fn simulate_p1(&mut self) -> u64 {
         let mut beams: VecDeque<Position> = VecDeque::from([self.start]);
@@ -92,7 +89,7 @@ pub fn part_one(input: &str) -> Option<u64> {
 }
 
 pub fn part_two(input: &str) -> Option<u64> {
-    let mut map = Map::new(input);
+    let map = Map::new(input);
     let mut memo = HashMap::new();
     let result = map.beam(map.start.0, map.start.1, &mut memo);
     Some(result)
